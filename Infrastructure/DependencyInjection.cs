@@ -17,6 +17,7 @@ public static class DependencyInjection
         services.AddScoped<IUFRepository, UFRepository>();
         services.AddScoped<IProdutoRepository, ProdutoRepository>();
         services.AddScoped<IPreferenciaRepository, PreferenciaRepository>();
+        services.AddScoped<IPedidoRepository, PedidoRepository>();
 
         services.AddDbContext<LojaDbContext>(options =>
         {

@@ -132,3 +132,22 @@ Accept: application/json
 
 DELETE {{Api_HostAddress}}/api/produto/5555555555555
 Accept: application/json
+
+###
+
+POST {{Api_HostAddress}}/api/pedido
+Content-type: application/json
+
+{
+    "cpf": "36718168050",
+    "logradouro": "Rua das Bananas",
+    "numero": "400",
+    "complemento": "ap 404",
+    "bairro": "São Cristovão",
+    "cep": "23000000",
+    "uf": "RJ",
+    "itens" : [
+        { "codigoBarras": "2345678901234", "quantidade": "4"},
+        { "codigoBarras": "3456789012345", "quantidade": "5"}
+    ]
+}

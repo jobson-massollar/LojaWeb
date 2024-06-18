@@ -46,17 +46,17 @@ public class Pedido : Entity<Pedido>
     /// <param name="quantidade">Quantidade vendida no item</param>
     /// <param name="preco">Preço praticado na venda</param>
     /// <returns>True se o item foi adicionado, ou False caso contrário</returns>
-    public bool AddItem(Produto produto, int quantidade, Dinheiro preco)
+    public Result<Item> AddItem(Produto produto, int quantidade, Dinheiro preco)
     {
         var result = Item.Create(this, produto, quantidade, preco);
 
         if (result.IsSuccess)
         {
             Itens.Add(result.Value!);
-            return true;
+            //return true;
         }
 
-        return false;
+        return result;
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ public class Pedido : Entity<Pedido>
     /// <param name="produto">Produto comercializado no item</param>
     /// <param name="quantidade">Quantidad evendida no item</param>
     /// <returns>True se o item foi adicionado, ou False caso contrário</returns>
-    public bool AddItem(Produto produto, int quantidade) => AddItem(produto, quantidade, produto.Preco);
+    public Result<Item> AddItem(Produto produto, int quantidade) => AddItem(produto, quantidade, produto.Preco);
 
     private static List<ErroEntidade> valida(Cliente cliente, Endereco endereco)
     {

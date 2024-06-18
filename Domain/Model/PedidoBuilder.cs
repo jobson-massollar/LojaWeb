@@ -130,7 +130,7 @@ public class PedidoBuilder
             // Se ocorreu o erro e o endereço é nulo, então os erros sobre o endereço já estão na lista
             // Remove o erro criado pelo cliente
             if (endereco is null)
-                resultPedido.Errors!.Remove(ErroEntidade.CLIENTE_ENDERECO_INVALIDO);
+                resultPedido.Errors!.Remove(ErroEntidade.PEDIDO_ENDERECO_INVALIDO);
 
             erros = erros.Concat(resultPedido.Errors).ToList();
 

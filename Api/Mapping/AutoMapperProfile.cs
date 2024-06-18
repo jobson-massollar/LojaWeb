@@ -14,6 +14,10 @@ public class AutoMapperProfile : Profile
 
         CreateMap<CriarProdutoRequest, CriarProdutoData>();
 
+        CreateMap<CriarPedidoRequest, CriarPedidoData>();
+
+        CreateMap<ItemPedidoRequest, ItemPedidoData>();
+
         // Mapeamento dos Responses
         CreateMap<Cliente, ClienteResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -39,6 +43,15 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.Preco, opt => opt.MapFrom(src => src.Preco.Valor));
 
         CreateMap<Preferencia, PreferenciaResponse>();
+
+        CreateMap<Pedido, PedidoResponse>();
+
+        CreateMap<Item, ItemPedidoResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Quantidade, opt => opt.MapFrom(src => src.Quantidade))
+            .ForMember(dest => dest.Moeda, opt => opt.MapFrom(src => src.Preco.Moeda))
+            .ForMember(dest => dest.Preco, opt => opt.MapFrom(src => src.Preco.Valor))
+            .ForMember(dest => dest.Produto, opt => opt.MapFrom(src => src.Produto.Descricao));
 
     }
 }

@@ -43,10 +43,12 @@ public class MensagemErro
            { ErroEntidade.PRODUTO_DESCRICAO_INVALIDA, "Descrição do produto não pode ficar em branco" },
            { ErroEntidade.PRODUTO_PRECO_INVALIDO, "Preço do produto inválido" },
            { ErroEntidade.PRODUTO_CODIGO_BARRAS_JA_EXISTE, "Já existe um produto com esse código de barras" },
+           { ErroEntidade.PRODUTO_NAO_ENCONTRADO, "Produto não encontrado" },
            { ErroEntidade.PRODUTO_NAO_PODE_EXCLUIR, "Não é possível excluir esse produto" },
 
            { ErroEntidade.PEDIDO_CLIENTE_INVALIDO, "Cliente do pedido inválido" },
            { ErroEntidade.PEDIDO_ENDERECO_INVALIDO, "Endereço de entrega do pedido inválido" },
+           { ErroEntidade.PEDIDO_NAO_ENCONTRADO, "Pedido nao encontrado" },
            { ErroEntidade.PEDIDO_NAO_PODE_EXCLUIR, "Não é possível excluir esse pedido" },
 
            { ErroEntidade.ITEM_PEDIDO_INVALIDO, "Item com pedido inválido" },
