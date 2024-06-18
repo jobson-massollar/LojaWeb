@@ -27,6 +27,12 @@ public class ClienteRepository : IClienteRepository
             .ThenInclude(e => e.UF)
             .FirstOrDefault(c => c.CPF.Valor == cpf);
 
+    public Cliente? RecuperarPorId(Guid id) =>
+        db.Clientes
+            .Include(c => c.Endereco)
+            .ThenInclude(e => e.UF)
+            .FirstOrDefault(c => c.Id == id);
+
     public List<Cliente> RecuperarTodos() =>
         db.Clientes
             .Include(c => c.Endereco)

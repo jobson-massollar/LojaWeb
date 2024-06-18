@@ -14,7 +14,7 @@ public interface IPreferenciaServices
 
     Preferencia? RecuperarPorDescricao(string descricao);
 
-    List<Preferencia> RecuperarPorCliente(Guid clienteId);
+    Result<List<Preferencia>?> RecuperarPorCliente(Guid clienteId);
 
     List<Preferencia> RecuperarTodas();
 

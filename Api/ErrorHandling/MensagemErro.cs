@@ -35,6 +35,7 @@ public class MensagemErro
            { ErroEntidade.CLIENTE_TELEFONE_INVALIDO, "Telefone do cliente inválido. Forneça DDD e número" },
            { ErroEntidade.CLIENTE_CPF_JA_EXISTE, "Já existe um cliente com esse CPF" },
            { ErroEntidade.CLIENTE_EMAIL_JA_EXISTE, "Já existe um cliente com esse e-mail" },
+           { ErroEntidade.CLIENTE_NAO_ENCONTRADO, "Cliente não encontrado" },
 
            { ErroEntidade.PRODUTO_CODIGO_BARRAS_INVALIDO, "Código de barras do produto deve ter 13 dígitos" },
            { ErroEntidade.PRODUTO_DESCRICAO_INVALIDA, "Descrição do produto não pode ficar em branco" },

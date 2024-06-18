@@ -1,4 +1,5 @@
 ﻿using Domain.Model;
+using Domain.Model.Errors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ public interface IPreferenciaRepository
 {
     Preferencia? RecuperarPorDescricao(string descricao);
 
-    List<Preferencia> RecuperarPorCliente(Guid clienteId);
+    Result<List<Preferencia>?> RecuperarPorCliente(Guid clienteId);
 
     List<Preferencia> RecuperarTodas();
 

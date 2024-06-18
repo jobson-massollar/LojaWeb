@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.Infrastructure.Repository;
 using Domain.Model;
+using Domain.Model.Errors;
 using Infrastructure.Db;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -25,9 +26,16 @@ public class PreferenciaRepository : IPreferenciaRepository
         db.SaveChanges();
     }
 
-    public List<Preferencia> RecuperarPorCliente(Guid clienteId)
+    public Result<List<Preferencia>?> RecuperarPorCliente(Guid clienteId)
     {
-        return db.Preferencias.Include(p => p.Clientes.Where(c => c.Id == clienteId)).ToList();
+        Result<List<Preferencia>> result;
+
+        var cliente = db.Clientes.FirstOrDefault(c => c.Id == clienteId);
+
+        if (cliente is null)
+            return (List<ErroEntidade>) [ErroEntidade.CLIENTE_NAO_ENCONTRADO];
+
+        return cliente.Preferencias;
     }
 
     public Preferencia? RecuperarPorDescricao(string descricao)

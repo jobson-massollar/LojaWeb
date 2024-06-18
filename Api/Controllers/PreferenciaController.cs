@@ -22,14 +22,14 @@ public class PreferenciaController : Controller
     }
 
     [HttpPost]
-    public IActionResult CriarPreferencia(string descricao)
+    public IActionResult CriarPreferencia(CriarPreferenciaRequest request)
     {
-        var result = prefServices.CriarPreferencia(descricao);
+        var result = prefServices.CriarPreferencia(request.Descricao);
 
         return result.IsSuccess ? 
             Ok(mapper.Map<PreferenciaResponse>(result.Value!))
             :
-            BadRequest(result.Errors!);
+            BadRequest(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpGet("{descricao}")]
@@ -40,12 +40,20 @@ public class PreferenciaController : Controller
         return preferencia is not null ? Ok(mapper.Map<PreferenciaResponse>(preferencia)) : NotFound();
     }
 
-    [HttpGet("{clienteId}")]
+    [HttpGet("{clienteId:guid}")]
     public IActionResult RecuperarPorCliente(Guid clienteId)
     {
-        var preferencias = prefServices.RecuperarPorCliente(clienteId);
+        var result = prefServices.RecuperarPorCliente(clienteId);
 
-        return Ok(preferencias.Select(p => mapper.Map<PreferenciaResponse>(p)).ToList());
+        if (result.IsSuccess)
+        {
+            return result.Value is not null ? 
+                Ok(result.Value.Select(p => mapper.Map<PreferenciaResponse>(p)))
+                :
+                NotFound();
+        }
+        else
+            return BadRequest(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpGet]
@@ -55,8 +63,6 @@ public class PreferenciaController : Controller
 
         return Ok(preferencias.Select(p => mapper.Map<PreferenciaResponse>(p)).ToList());
     }
-
-
 
     [HttpDelete("{id:guid}")]
     public IActionResult RemoverPreferencia(Guid id)

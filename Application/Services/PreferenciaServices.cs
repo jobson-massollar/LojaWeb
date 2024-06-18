@@ -16,6 +16,11 @@ public class PreferenciaServices : IPreferenciaServices
 
     public Result<Preferencia> CriarPreferencia(string descricao)
     {
+        var preferencia = preferenciaRepository.RecuperarPorDescricao(descricao);
+
+        if (preferencia is not null)
+            return (List<ErroEntidade>)[ErroEntidade.PREFERENCIA_DESCRICAO_JA_EXISTE];
+
         var result = Preferencia.Create(descricao);
 
         if (result.IsSuccess)
@@ -29,7 +34,7 @@ public class PreferenciaServices : IPreferenciaServices
         return preferenciaRepository.RecuperarPorDescricao(descricao);
     }
 
-    public List<Preferencia> RecuperarPorCliente(Guid clienteId)
+    public Result<List<Preferencia>?> RecuperarPorCliente(Guid clienteId)
     {
         return preferenciaRepository.RecuperarPorCliente(clienteId);
     }

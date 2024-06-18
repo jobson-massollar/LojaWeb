@@ -6,6 +6,8 @@ public interface IClienteRepository
 {
     Cliente? RecuperarPorCPF(long cpf);
 
+    Cliente? RecuperarPorId(Guid id);
+
     List<Cliente> RecuperarTodos();
 
     bool JaExisteCPF(long cpf);

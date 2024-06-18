@@ -19,15 +19,15 @@ POST {{Api_HostAddress}}/api/cliente
 Content-type: application/json
 
 {
-    "cpf": "82372250743",
-    "nome": "Jobson Luiz",
-    "email": "jobson.luiz@gmail.com",
+    "cpf": "22237067031",
+    "nome": "Jose da Silva",
+    "email": "jose.silva@gmail.com",
     "password": "123456",
     "logradouro": "Rua Barão de Mesquita",
-    "numero": "174",
-    "complemento": "ap 806",
+    "numero": "100",
+    "complemento": "ap 101",
     "bairro": "Tijuca",
-    "cep": "1",
+    "cep": "20540006",
     "uf": "RJ"
 }
 
@@ -38,8 +38,8 @@ POST {{Api_HostAddress}}/api/uf
 Content-type: application/json
 
 {
-    "sigla": "XX",
-    "nome": "XXX"
+    "sigla": "ES",
+    "nome": "Espírito Santo"
 }
 
 ###
@@ -59,4 +59,23 @@ Accept: application/json
 ###
 
 DELETE {{Api_HostAddress}}/api/uf/RJ
+Accept: application/json
+
+###
+
+POST {{Api_HostAddress}}/api/preferencia
+Content-type: application/json
+
+{
+    "descricao": "Natação"
+}
+
+###
+
+GET {{Api_HostAddress}}/api/preferencia/
+Accept: application/json
+
+###
+
+GET {{Api_HostAddress}}/api/preferencia/d8eacde5-b097-48e1-bcc7-1856cf3c0d13
 Accept: application/json
