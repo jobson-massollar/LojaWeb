@@ -13,8 +13,8 @@ public class PedidoServices : IPedidoServices
     private readonly IUFRepository ufRepository;
     private readonly IProdutoRepository produtoRepository;
 
-    public PedidoServices(IClienteRepository clienteRepository, 
-                          IPedidoRepository pedidoRepository, 
+    public PedidoServices(IClienteRepository clienteRepository,
+                          IPedidoRepository pedidoRepository,
                           IUFRepository ufRepository,
                           IProdutoRepository produtoRepository)
     {
@@ -35,12 +35,12 @@ public class PedidoServices : IPedidoServices
         if (cliente is null)
             erros.Add(ErroEntidade.CLIENTE_NAO_ENCONTRADO);
 
-        var result = new PedidoBuilder(cliente, 
-                                       dados.Logradouro, 
-                                       dados.Numero, 
-                                       dados.Complemento, 
-                                       dados.Bairro, 
-                                       dados.Cep, 
+        var result = new PedidoBuilder(cliente,
+                                       dados.Logradouro,
+                                       dados.Numero,
+                                       dados.Complemento,
+                                       dados.Bairro,
+                                       dados.Cep,
                                        uf).Build();
 
         if (result.hasErrors)
@@ -77,4 +77,8 @@ public class PedidoServices : IPedidoServices
         else
             return erros;
     }
+
+    public List<Pedido> RecuperarTodos() => pedidoRepository.RecuperarTodos();
+
+    public Result<int> Remover(Guid id) => pedidoRepository.RemoverPorId(id);
 }

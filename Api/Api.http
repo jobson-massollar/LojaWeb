@@ -65,6 +65,16 @@ Content-type: application/json
 
 ###
 
+GET {{Api_HostAddress}}/api/cliente/db15dc85-b763-4e7b-baf7-a2f409b56334/preferencias
+Accept: application/json
+
+###
+
+GET {{Api_HostAddress}}/api/cliente/db15dc85-b763-4e7b-baf7-a2f409b56334/pedidos
+Accept: application/json
+
+###
+
 POST {{Api_HostAddress}}/api/uf
 Content-type: application/json
 
@@ -74,6 +84,7 @@ Content-type: application/json
 }
 
 ###
+
 GET {{Api_HostAddress}}/api/uf/RJ
 Accept: application/json
 

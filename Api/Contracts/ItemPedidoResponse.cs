@@ -6,9 +6,9 @@ public class ItemPedidoResponse
 
     public int Quantidade { get; private set; }
 
-    public string Moeda {  get; private set; }
+    public string Moeda { get; private set; }
 
-    public float Preco {  get; private set; }
+    public float Preco { get; private set; }
 
     public string Produto { get; private set; }
 

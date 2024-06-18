@@ -1,5 +1,4 @@
-﻿using Castle.Components.DictionaryAdapter.Xml;
-using Domain.Model;
+﻿using Domain.Model;
 using Domain.Model.Errors;
 
 namespace Application.Interfaces.Infrastructure.Repository;

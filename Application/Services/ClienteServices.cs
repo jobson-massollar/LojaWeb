@@ -2,7 +2,6 @@
 using Application.Interfaces.Infrastructure.Repository;
 using Domain.Model;
 using Domain.Model.Errors;
-using System.Collections.Generic;
 
 namespace Application.Services;
 

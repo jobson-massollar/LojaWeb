@@ -14,11 +14,11 @@ public class ClienteRepository : Repositorio<Cliente>, IClienteRepository
 
     public bool JaExisteEmail(string email) => db.Clientes.FirstOrDefault(c => c.Email == email) is Cliente;
 
-    public Result<List<Pedido>?> RecuperarPedidos(Guid clienteId)
+    public Result<List<Pedido>?> RecuperarPedidos(Guid id)
     {
-        var result = RecuperarPorId(clienteId, ErroEntidade.CLIENTE_NAO_ENCONTRADO);
+        var cliente = RecuperarPorIdComPedidos(id);
 
-        return result.IsSuccess ? result.Value!.Pedidos : result.Errors!;
+        return cliente is not null ? cliente.Pedidos : (List<ErroEntidade>)[ErroEntidade.CLIENTE_NAO_ENCONTRADO];
     }
 
     public Cliente? RecuperarPorCPF(long cpf) =>
@@ -38,11 +38,18 @@ public class ClienteRepository : Repositorio<Cliente>, IClienteRepository
             .Include(c => c.Preferencias)
             .FirstOrDefault(c => c.Id == id);
 
+    public Cliente? RecuperarPorIdComPedidos(Guid id) =>
+        db.Clientes
+            .Include(c => c.Pedidos)
+            .ThenInclude(p => p.Itens)
+            .ThenInclude(it => it.Produto)
+            .FirstOrDefault(c => c.Id == id);
+
     public Result<List<Preferencia>?> RecuperarPreferencias(Guid id)
     {
-        var result = RecuperarPorId(id, ErroEntidade.CLIENTE_NAO_ENCONTRADO);
+        var cliente = RecuperarPorIdComPreferencias(id);
 
-        return result.IsSuccess ? result.Value!.Preferencias : result.Errors!;
+        return cliente is not null ? cliente.Preferencias : (List<ErroEntidade>)[ErroEntidade.CLIENTE_NAO_ENCONTRADO];
     }
 
     public void AtualizarPreferencias(Cliente cliente, List<Preferencia> preferencias)

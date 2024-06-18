@@ -2,7 +2,6 @@
 using Api.ErrorHandling;
 using Application.Interfaces.Entry;
 using AutoMapper;
-using Domain.Model.Errors;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 
@@ -120,7 +119,7 @@ public class ClienteController : ControllerBase
 
         return result.IsSuccess ?
             Ok()
-            : 
+            :
             BadRequest(msgErro.GerarErros(result.Errors!));
     }
 

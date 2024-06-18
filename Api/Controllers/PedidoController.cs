@@ -3,6 +3,7 @@ using Api.ErrorHandling;
 using Application.Interfaces.Entry;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mime;
 
 namespace Api.Controllers;
 
@@ -21,7 +22,10 @@ public class PedidoController : Controller
         this.msgErro = msgErro;
     }
 
-    [HttpPost]   
+    [HttpPost]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
     public IActionResult CriarPedido(CriarPedidoRequest request)
     {
         var data = mapper.Map<CriarPedidoData>(request);
@@ -29,8 +33,33 @@ public class PedidoController : Controller
         var result = pedidoServices.CriarPedido(data);
 
         return result.IsSuccess ?
-            CreatedAtAction(nameof(CriarPedido), mapper.Map<PedidoResponse>(result.Value!)) 
-            : 
+            CreatedAtAction(nameof(CriarPedido), mapper.Map<PedidoResponse>(result.Value!))
+            :
             BadRequest(msgErro.GerarErros(result.Errors!));
+    }
+
+    [HttpGet]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType<List<PedidoResponse>>(StatusCodes.Status200OK)]
+    public IActionResult RecuperarTodosPedidoss()
+    {
+        var pedidos = pedidoServices.RecuperarTodos();
+
+        return Ok(pedidos.Select(p => mapper.Map<PedidoResponse>(p)).ToList());
+    }
+
+    [HttpDelete("{id:Guid}")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
+    public IActionResult RemoverPedido(Guid id)
+    {
+        var result = pedidoServices.Remover(id);
+
+        if (result.IsSuccess)
+            return result.Value! == 1 ? NoContent() : NotFound();
+        else
+            return BadRequest(msgErro.GerarErros(result.Errors!));
     }
 }
