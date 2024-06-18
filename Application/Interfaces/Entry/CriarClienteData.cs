@@ -12,6 +12,8 @@ public record CriarClienteData
     public string Bairro { get; private set; }
     public int Cep { get; private set; }
     public string Uf { get; private set; }
+    public int? DDD { get; private set; }
+    public int? Telefone { get; private set; }
 
     public CriarClienteData() { }
 }

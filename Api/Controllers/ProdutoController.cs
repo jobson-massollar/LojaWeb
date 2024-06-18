@@ -3,6 +3,7 @@ using Api.ErrorHandling;
 using Application.Interfaces.Entry;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mime;
 
 namespace Api.Controllers;
 
@@ -22,6 +23,9 @@ public class ProdutoController : Controller
     }
 
     [HttpPost]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
     public IActionResult CriarProduto(CriarProdutoRequest request)
     {
         var data = mapper.Map<CriarProdutoData>(request);
@@ -35,6 +39,9 @@ public class ProdutoController : Controller
     }
 
     [HttpGet("{codigo}")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType<ProdutoResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult RecuperarProdutoPorCodigo(string codigo)
     {
         var produto = produtoServices.RecuperarPorCodigo(codigo);
@@ -43,6 +50,9 @@ public class ProdutoController : Controller
     }
 
     [HttpGet]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType<List<ProdutoResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult RecuperarTodosProdutos()
     {
         var produtos = produtoServices.RecuperarTodos();
@@ -51,14 +61,32 @@ public class ProdutoController : Controller
     }
 
     [HttpDelete("{id:guid}")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
     public IActionResult RemoverProduto(Guid id)
     {
-        return Ok(produtoServices.RemoverProduto(id));
+        var result = produtoServices.Remover(id);
+
+        if (result.IsSuccess)
+            return result.Value! == 1 ? NoContent() : NotFound();
+        else
+            return BadRequest(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpDelete("{codigo}")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
     public IActionResult RemoverProduto(string codigo)
     {
-        return Ok(produtoServices.RemoverProduto(codigo));
+        var result = produtoServices.Remover(codigo);
+
+        if (result.IsSuccess)
+            return result.Value! == 1 ? NoContent() : NotFound();
+        else
+            return BadRequest(msgErro.GerarErros(result.Errors!));
     }
 }

@@ -1,10 +1,5 @@
 ﻿using Domain.Model;
 using Domain.Model.Errors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Interfaces.Entry;
 
@@ -14,11 +9,9 @@ public interface IPreferenciaServices
 
     Preferencia? RecuperarPorDescricao(string descricao);
 
-    Result<List<Preferencia>?> RecuperarPorCliente(Guid clienteId);
-
     List<Preferencia> RecuperarTodas();
 
-    int RemoverPreferencia(Guid id);
+    Result<int> Remover(Guid id);
 
-    int RemoverPreferencia(string descricao);
+    Result<int> Remover(string descricao);
 }

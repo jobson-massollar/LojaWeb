@@ -1,6 +1,6 @@
 ﻿namespace Api.Contracts;
 
-public record PreferenciaResponse
+public class PreferenciaResponse
 {
     public string Id { get; private set; }
 

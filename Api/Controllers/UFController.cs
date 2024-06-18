@@ -1,9 +1,7 @@
 ﻿using Api.Contracts;
 using Api.ErrorHandling;
 using Application.Interfaces.Entry;
-using Application.Services;
 using AutoMapper;
-using Domain.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 
@@ -11,7 +9,6 @@ namespace Api.Controllers;
 
 [Route("api/uf")]
 [ApiController]
-
 public class UFController : Controller
 {
     private IUFServices ufServices;
@@ -58,19 +55,33 @@ public class UFController : Controller
         return Ok(ufServices.RecuperarTodas().Select(uf => mapper.Map<UFResponse>(uf)));
     }
 
-    [HttpDelete("{id:Guid}")]
+    [HttpDelete("{id:guid}")]
     [Consumes(MediaTypeNames.Application.Json)]
-    [ProducesResponseType<int>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
     public IActionResult RemoverUF(Guid id)
     {
-        return Ok(ufServices.Remover(id));
+        var result = ufServices.Remover(id);
+
+        if (result.IsSuccess)
+            return result.Value! == 1 ? NoContent() : NotFound();
+        else
+            return BadRequest(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpDelete("{sigla}")]
     [Consumes(MediaTypeNames.Application.Json)]
-    [ProducesResponseType<int>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
     public IActionResult RemoverUF(string sigla)
     {
-        return Ok(ufServices.Remover(sigla));
+        var result = ufServices.Remover(sigla);
+
+        if (result.IsSuccess)
+            return result.Value! == 1 ? NoContent() : NotFound();
+        else
+            return BadRequest(msgErro.GerarErros(result.Errors!));
     }
 }

@@ -11,7 +11,7 @@ public interface IUFServices
 
     UF? RecuperarPorSigla(string sigla);
 
-    int Remover(Guid id);
+    Result<int> Remover(Guid id);
 
-    int Remover(string sigla);
+    Result<int> Remover(string sigla);
 }

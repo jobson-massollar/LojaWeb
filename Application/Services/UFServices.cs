@@ -2,7 +2,6 @@
 using Application.Interfaces.Infrastructure.Repository;
 using Domain.Model;
 using Domain.Model.Errors;
-using System.ComponentModel.DataAnnotations;
 
 namespace Application.Services;
 
@@ -27,9 +26,9 @@ public class UFServices : IUFServices
 
         if (erros.Count == 0)
         {
-            ufRepository.Add(result.Value!);
+            ufRepository.Adicionar(result.Value!);
 
-            return result.Value!;
+            return result;
         }
         else
             return erros;
@@ -37,9 +36,9 @@ public class UFServices : IUFServices
 
     public UF? RecuperarPorSigla(string sigla) => ufRepository.RecuperarPorSigla(sigla);
 
-    public List<UF> RecuperarTodas() => ufRepository.RecuperarTodas();
+    public List<UF> RecuperarTodas() => ufRepository.RecuperarTodos();
 
-    public int Remover(Guid id) => ufRepository.Remove(id);
+    public Result<int> Remover(Guid id) => ufRepository.RemoverPorId(id);
 
-    public int Remover(string sigla) => ufRepository.Remove(sigla);
+    public Result<int> Remover(string sigla) => ufRepository.RemoverPorSigla(sigla);
 }

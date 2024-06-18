@@ -24,7 +24,7 @@ public class PreferenciaServices : IPreferenciaServices
         var result = Preferencia.Create(descricao);
 
         if (result.IsSuccess)
-            preferenciaRepository.Add(result.Value!);
+            preferenciaRepository.Adicionar(result.Value!);
 
         return result;
     }
@@ -34,23 +34,18 @@ public class PreferenciaServices : IPreferenciaServices
         return preferenciaRepository.RecuperarPorDescricao(descricao);
     }
 
-    public Result<List<Preferencia>?> RecuperarPorCliente(Guid clienteId)
-    {
-        return preferenciaRepository.RecuperarPorCliente(clienteId);
-    }
-
     public List<Preferencia> RecuperarTodas()
     {
-        return preferenciaRepository.RecuperarTodas();
+        return preferenciaRepository.RecuperarTodos();
     }
 
-    public int RemoverPreferencia(Guid id)
+    public Result<int> Remover(Guid id)
     {
-       return preferenciaRepository.Remove(id);
+        return preferenciaRepository.RemoverPorId(id);
     }
 
-    public int RemoverPreferencia(string descricao)
+    public Result<int> Remover(string descricao)
     {
-        return preferenciaRepository.Remove(descricao);
+        return preferenciaRepository.RemoverPorDescricao(descricao);
     }
 }

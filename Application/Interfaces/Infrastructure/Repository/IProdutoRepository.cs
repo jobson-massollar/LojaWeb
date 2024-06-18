@@ -1,21 +1,25 @@
 ﻿using Domain.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.Model.Errors;
 
 namespace Application.Interfaces.Infrastructure.Repository;
 
 public interface IProdutoRepository
 {
-    Produto? RecuperarPorCodigo(string codigo);
+    void Adicionar(Produto produto);
+
+    void Remover(Produto produto);
+
+    Produto? RecuperarPorId(Guid id);
+
+    Result<Produto> RecuperarPorId(Guid id, ErroEntidade erro);
 
     List<Produto> RecuperarTodos();
 
-    void Add(Produto produto);
+    Result<int> RemoverPorId(Guid id);
 
-    int Remove(Guid id);
+    Result<int> RemoverPorId(Guid id, ErroEntidade erro);
 
-    int Remove(string descricao);
+    Produto? RecuperarPorCodigo(string codigo);
+
+    Result<int> RemoverPorCodigo(string codigoBarras);
 }

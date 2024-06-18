@@ -1,6 +1,5 @@
-﻿namespace Api.Contracts
+﻿namespace Api.Contracts;
+
+public record RecuperarClientePorCPFRequest(long cpf)
 {
-    public record RecuperarClientePorCPFRequest(long cpf)
-    {
-    }
 }

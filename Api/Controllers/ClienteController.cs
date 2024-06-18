@@ -2,7 +2,6 @@
 using Api.ErrorHandling;
 using Application.Interfaces.Entry;
 using AutoMapper;
-using Domain.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 
@@ -62,17 +61,69 @@ public class ClienteController : ControllerBase
 
     [HttpDelete("{id:Guid}")]
     [Consumes(MediaTypeNames.Application.Json)]
-    [ProducesResponseType<int>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
     public IActionResult RemoverCliente(Guid id)
     {
-        return Ok(clienteServices.Remover(id));
+        var result = clienteServices.Remover(id);
+
+        if (result.IsSuccess)
+            return result.Value! == 1 ? NoContent() : NotFound();
+        else
+            return BadRequest(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpDelete("{cpf:long}")]
     [Consumes(MediaTypeNames.Application.Json)]
-    [ProducesResponseType<int>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
     public IActionResult RemoverCliente(long cpf)
     {
-        return Ok(clienteServices.Remover(cpf));
+        var result = clienteServices.Remover(cpf);
+
+        if (result.IsSuccess)
+            return result.Value! == 1 ? NoContent() : NotFound();
+        else
+            return BadRequest(msgErro.GerarErros(result.Errors!));
+    }
+
+    [HttpGet("{clienteId:guid}/preferencias")]
+    public IActionResult RecuperarPreferencias(Guid clienteId)
+    {
+        var result = clienteServices.RecuperarPreferencias(clienteId);
+
+        if (result.IsSuccess)
+        {
+            return result.Value is not null ?
+                Ok(result.Value.Select(p => mapper.Map<PreferenciaResponse>(p)))
+                :
+                NotFound();
+        }
+        else
+            return BadRequest(msgErro.GerarErros(result.Errors!));
+    }
+
+    [HttpPost("{clienteId:guid}/preferencias")]
+    public IActionResult DefinirPreferencias(Guid clienteId, DefinirPreferenciasRequest request)
+    {
+
+    }
+
+    [HttpGet("{clienteId:guid}/pedidos")]
+    public IActionResult RecuperarPedidos(Guid clienteId)
+    {
+        var result = clienteServices.RecuperarPedidos(clienteId);
+
+        if (result.IsSuccess)
+        {
+            return result.Value is not null ?
+                Ok(result.Value.Select(p => mapper.Map<PedidoResponse>(p)))
+                :
+                NotFound();
+        }
+        else
+            return BadRequest(msgErro.GerarErros(result.Errors!));
     }
 }

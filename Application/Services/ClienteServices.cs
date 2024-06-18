@@ -16,52 +16,63 @@ public class ClienteServices : IClienteServices
         this.ufRepository = ufRepository;
     }
 
-    public Result<Cliente> CriarCliente(CriarClienteData dadosCliente)
+    public Result<Cliente> CriarCliente(CriarClienteData dados)
     {
         List<ErroEntidade> erros = [];
 
-        var uf = ufRepository.RecuperarPorSigla(dadosCliente.Uf);
+        var uf = ufRepository.RecuperarPorSigla(dados.Uf);
 
         // Verifica ducplicidade de CPF
-        if (clienteRepository.JaExisteCPF(dadosCliente.Cpf))
+        if (clienteRepository.JaExisteCPF(dados.Cpf))
             erros.Add(ErroEntidade.CLIENTE_CPF_JA_EXISTE);
 
         // Verifica ducplicdade de e-mail
-        if (clienteRepository.JaExisteEmail(dadosCliente.Email))
+        if (clienteRepository.JaExisteEmail(dados.Email))
             erros.Add(ErroEntidade.CLIENTE_EMAIL_JA_EXISTE);
 
         // Tenta construir o cliente mesmo se houver erro de CPF ou e-mail duplicado,
         // porque podem haver outros erros de validação
-        var resultCliente = new ClienteBuilder(dadosCliente.Cpf,
-                                               dadosCliente.Nome,
-                                               dadosCliente.Email,
-                                               dadosCliente.Logradouro,
-                                               dadosCliente.Numero,
-                                               dadosCliente.Complemento,
-                                               dadosCliente.Bairro,
-                                               dadosCliente.Cep,
-                                               uf).Build();
+        var result = new ClienteBuilder(dados.Cpf,
+                                        dados.Nome,
+                                        dados.Email,
+                                        dados.Logradouro,
+                                        dados.Numero,
+                                        dados.Complemento,
+                                        dados.Bairro,
+                                        dados.Cep,
+                                        uf)
+                                .ComTelefone(dados.DDD, dados.Telefone)
+                                .Build();
 
         // Junta os erros da validação do cliente com os demais
-        if (resultCliente.hasErrors)
-            erros = erros.Concat(resultCliente.Errors!).ToList();
-
+        if (result.hasErrors)
+            erros = erros.Concat(result.Errors!).ToList();
 
         if (erros.Count == 0)
         {
-            clienteRepository.Add(resultCliente.Value!);
+            clienteRepository.Adicionar(result.Value!);
 
-            return resultCliente.Value!;
+            return result;
         }
         else
             return erros;
     }
 
+    public Result<List<Pedido>?> RecuperarPedidos(Guid clienteId)
+    {
+        return clienteRepository.RecuperarPedidos(clienteId);
+    }
+
     public Cliente? RecuperarPorCPF(long cpf) => clienteRepository.RecuperarPorCPF(cpf);
+
+    public Result<List<Preferencia>?> RecuperarPreferencias(Guid clienteId)
+    {
+        return clienteRepository.RecuperarPreferencias(clienteId);
+    }
 
     public List<Cliente> RecuperarTodos() => clienteRepository.RecuperarTodos();
 
-    public int Remover(Guid id) => clienteRepository.Remove(id);
+    public Result<int> Remover(Guid id) => clienteRepository.RemoverPorId(id);
 
-    public int Remover(long cpf) => clienteRepository.Remove(cpf);
+    public Result<int> Remover(long cpf) => clienteRepository.RemoverPorCpf(cpf);
 }

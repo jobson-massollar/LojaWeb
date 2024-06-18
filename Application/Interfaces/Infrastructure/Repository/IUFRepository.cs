@@ -1,18 +1,27 @@
 ﻿using Domain.Model;
+using Domain.Model.Errors;
 
 namespace Application.Interfaces.Infrastructure.Repository;
 
 public interface IUFRepository
 {
-    UF? RecuperarPorSigla(string siglaUF);
+    void Adicionar(UF uf);
 
-    List<UF> RecuperarTodas();
+    void Remover(UF uf);
+
+    UF? RecuperarPorId(Guid id);
+
+    Result<UF> RecuperarPorId(Guid id, ErroEntidade erro);
+
+    List<UF> RecuperarTodos();
+
+    Result<int> RemoverPorId(Guid id);
+
+    Result<int> RemoverPorId(Guid id, ErroEntidade erro);
+
+    UF? RecuperarPorSigla(string siglaUF);
 
     bool JaExisteUF(string sigla);
 
-    void Add(UF uf);
-
-    int Remove(Guid id);
-
-    int Remove(String sigla);
+    Result<int> RemoverPorSigla(String sigla);
 }

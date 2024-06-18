@@ -11,7 +11,11 @@ public interface IClienteServices
 
     List<Cliente> RecuperarTodos();
 
-    int Remover(Guid id);
+    Result<List<Preferencia>?> RecuperarPreferencias(Guid clienteId);
 
-    int Remover(long cpf);
+    Result<List<Pedido>?> RecuperarPedidos(Guid clienteId);
+
+    Result<int> Remover(Guid id);
+
+    Result<int> Remover(long cpf);
 }

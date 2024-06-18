@@ -1,6 +1,6 @@
 ﻿namespace Api.Contracts;
 
-public record UFResponse
+public class UFResponse
 {
     public Guid Id { get; private set; }
 

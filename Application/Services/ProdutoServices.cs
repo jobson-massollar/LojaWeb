@@ -2,11 +2,6 @@
 using Application.Interfaces.Infrastructure.Repository;
 using Domain.Model;
 using Domain.Model.Errors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services;
 
@@ -21,12 +16,26 @@ public class ProdutoServices : IProdutoServices
 
     public Result<Produto> CriarProduto(CriarProdutoData data)
     {
+        List<ErroEntidade> erros = [];
+
+        var produto = produtoRepository.RecuperarPorCodigo(data.CodigoBarras);
+
+        if (produto is not null)
+            erros.Add(ErroEntidade.PRODUTO_CODIGO_BARRAS_JA_EXISTE);
+
         var result = new ProdutoBuilder(data.CodigoBarras, data.Descricao, data.Moeda, data.Preco).Build();
 
-        if (result.IsSuccess)
-            produtoRepository.Add(result.Value!);
+        if (result.hasErrors)
+            erros = erros.Concat(result.Errors!).ToList();
 
-        return result;
+        if (erros.Count == 0)
+        {
+            produtoRepository.Adicionar(result.Value!);
+
+            return result;
+        }
+        else
+            return erros;
     }
 
     public Produto? RecuperarPorCodigo(string codigo)
@@ -39,13 +48,13 @@ public class ProdutoServices : IProdutoServices
         return produtoRepository.RecuperarTodos();
     }
 
-    public int RemoverProduto(string codigo)
+    public Result<int> Remover(string codigoBarras)
     {
-        return produtoRepository.Remove(codigo);
+        return produtoRepository.RemoverPorCodigo(codigoBarras);
     }
 
-    public int RemoverProduto(Guid id)
+    public Result<int> Remover(Guid id)
     {
-        return produtoRepository.Remove(id);
+        return produtoRepository.RemoverPorId(id);
     }
 }

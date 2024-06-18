@@ -1,6 +1,5 @@
-﻿namespace Api.Contracts
+﻿namespace Api.Contracts;
+
+public record CriarUFRequest(string Sigla, string Nome)
 {
-    public record CriarUFRequest(string Sigla, string Nome)
-    {
-    }
 }

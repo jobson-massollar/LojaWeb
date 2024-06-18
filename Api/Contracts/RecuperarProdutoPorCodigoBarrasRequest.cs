@@ -1,6 +1,5 @@
-﻿namespace Api.Contracts
+﻿namespace Api.Contracts;
+
+public record RecuperarProdutoPorCodigoBarrasRequest(string codigoBarras)
 {
-    public record RecuperarProdutoPorCodigoBarrasRequest(string codigoBarras)
-    {
-    }
 }

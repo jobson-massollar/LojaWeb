@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+﻿namespace Api.Contracts;
 
-namespace Api.Contracts;
-
-public record ClienteResponse
+public class ClienteResponse
 {
     public Guid Id { get; private set; }
     public string Cpf { get; private set; }
@@ -14,6 +12,8 @@ public record ClienteResponse
     public string Bairro { get; private set; }
     public string Cep { get; private set; }
     public string Uf { get; private set; }
+    public string DDD { get; private set; }
+    public string Telefone { get; private set; }
 
     public ClienteResponse() { }
 }

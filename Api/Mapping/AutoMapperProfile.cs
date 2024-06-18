@@ -7,7 +7,7 @@ namespace Api.Mapping;
 
 public class AutoMapperProfile : Profile
 {
-    public AutoMapperProfile() 
+    public AutoMapperProfile()
     {
         // Mapeamento dos Requests
         CreateMap<CriarClienteRequest, CriarClienteData>();
@@ -25,12 +25,15 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.Complemento, opt => opt.MapFrom(src => src.Endereco.Complemento))
             .ForMember(dest => dest.Bairro, opt => opt.MapFrom(src => src.Endereco.Bairro))
             .ForMember(dest => dest.Cep, opt => opt.MapFrom(src => src.Endereco.Cep.Valor))
-            .ForMember(dest => dest.Uf, opt => opt.MapFrom(src => src.Endereco.UF.Sigla));
+            .ForMember(dest => dest.Uf, opt => opt.MapFrom(src => src.Endereco.UF.Sigla))
+            .ForMember(dest => dest.DDD, opt => opt.MapFrom(src => src.Telefone.DDD))
+            .ForMember(dest => dest.Telefone, opt => opt.MapFrom(src => src.Telefone.Numero));
 
         CreateMap<UF, UFResponse>();
 
         CreateMap<Produto, ProdutoResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.CodigoBarras, opt => opt.MapFrom(src => src.CodigoBarras.Valor))
             .ForMember(dest => dest.Descricao, opt => opt.MapFrom(src => src.Descricao))
             .ForMember(dest => dest.Moeda, opt => opt.MapFrom(src => src.Preco.Moeda))
             .ForMember(dest => dest.Preco, opt => opt.MapFrom(src => src.Preco.Valor));

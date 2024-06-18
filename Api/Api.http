@@ -19,18 +19,37 @@ POST {{Api_HostAddress}}/api/cliente
 Content-type: application/json
 
 {
-    "cpf": "22237067031",
+    "cpf": "22237067030",
     "nome": "Jose da Silva",
     "email": "jose.silva@gmail.com",
     "password": "123456",
-    "logradouro": "Rua Barão de Mesquita",
+    "logradouro": "",
     "numero": "100",
     "complemento": "ap 101",
     "bairro": "Tijuca",
-    "cep": "20540006",
+    "cep": "2054000",
     "uf": "RJ"
 }
 
+###
+
+POST {{Api_HostAddress}}/api/cliente
+Content-type: application/json
+
+{
+    "cpf": "36718168050",
+    "nome": "Maria Isabel",
+    "email": "maria.isabel@gmail.com",
+    "password": "234567",
+    "logradouro": "Rua das Margaridas",
+    "numero": "200",
+    "complemento": "ap 202",
+    "bairro": "Maracanã",
+    "ddd": "21",
+    "telefone": "987654321",
+    "cep": "21000000",
+    "uf": "RJ"
+}
 
 ###
 
@@ -77,5 +96,27 @@ Accept: application/json
 
 ###
 
-GET {{Api_HostAddress}}/api/preferencia/d8eacde5-b097-48e1-bcc7-1856cf3c0d13
+POST {{Api_HostAddress}}/api/produto
+Content-type: application/json
+
+{
+    "codigoBarras": "5555555555555",
+    "descricao": "Produto QUATRO",
+    "moeda": "R$",
+    "preco": "400"
+}
+
+###
+
+GET {{Api_HostAddress}}/api/produto/
+Accept: application/json
+
+###
+
+GET {{Api_HostAddress}}/api/produto/3456789012345
+Accept: application/json
+
+###
+
+DELETE {{Api_HostAddress}}/api/produto/5555555555555
 Accept: application/json

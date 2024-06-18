@@ -3,6 +3,7 @@ using Api.ErrorHandling;
 using Application.Interfaces.Entry;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mime;
 
 namespace Api.Controllers;
 
@@ -22,17 +23,22 @@ public class PreferenciaController : Controller
     }
 
     [HttpPost]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
     public IActionResult CriarPreferencia(CriarPreferenciaRequest request)
     {
         var result = prefServices.CriarPreferencia(request.Descricao);
 
-        return result.IsSuccess ? 
+        return result.IsSuccess ?
             Ok(mapper.Map<PreferenciaResponse>(result.Value!))
             :
             BadRequest(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpGet("{descricao}")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType<PreferenciaResponse>(StatusCodes.Status200OK)]
     public IActionResult RecuperarPreferenciaPorDescricao(string descricao)
     {
         var preferencia = prefServices.RecuperarPorDescricao(descricao);
@@ -40,23 +46,9 @@ public class PreferenciaController : Controller
         return preferencia is not null ? Ok(mapper.Map<PreferenciaResponse>(preferencia)) : NotFound();
     }
 
-    [HttpGet("{clienteId:guid}")]
-    public IActionResult RecuperarPorCliente(Guid clienteId)
-    {
-        var result = prefServices.RecuperarPorCliente(clienteId);
-
-        if (result.IsSuccess)
-        {
-            return result.Value is not null ? 
-                Ok(result.Value.Select(p => mapper.Map<PreferenciaResponse>(p)))
-                :
-                NotFound();
-        }
-        else
-            return BadRequest(msgErro.GerarErros(result.Errors!));
-    }
-
     [HttpGet]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType<List<PreferenciaResponse>>(StatusCodes.Status200OK)]
     public IActionResult RecuperarTodasPreferencias()
     {
         var preferencias = prefServices.RecuperarTodas();
@@ -65,14 +57,32 @@ public class PreferenciaController : Controller
     }
 
     [HttpDelete("{id:guid}")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
     public IActionResult RemoverPreferencia(Guid id)
     {
-        return Ok(prefServices.RemoverPreferencia(id));
+        var result = prefServices.Remover(id);
+
+        if (result.IsSuccess)
+            return result.Value! == 1 ? NoContent() : NotFound();
+        else
+            return BadRequest(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpDelete("{descricao}")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
     public IActionResult RemoverPreferencia(string descricao)
     {
-        return Ok(prefServices.RemoverPreferencia(descricao));
+        var result = prefServices.Remover(descricao);
+
+        if (result.IsSuccess)
+            return result.Value! == 1 ? NoContent() : NotFound();
+        else
+            return BadRequest(msgErro.GerarErros(result.Errors!));
     }
 }

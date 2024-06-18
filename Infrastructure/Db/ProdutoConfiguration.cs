@@ -9,7 +9,11 @@ public class ProdutoConfiguration : EntityConfiguration<Produto>
     {
         builder.Property(p => p.Descricao).HasMaxLength(50);
 
-        builder.ComplexProperty(p => p.CodigoBarras);
+        builder.OwnsOne(p => p.CodigoBarras, cbBuilder =>
+        {
+            cbBuilder.Property(cb => cb.Valor);
+            cbBuilder.HasIndex(cb => cb.Valor).IsUnique();
+        });
 
         builder.ComplexProperty(p => p.Preco);
 

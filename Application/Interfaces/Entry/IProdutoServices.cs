@@ -11,7 +11,7 @@ public interface IProdutoServices
 
     List<Produto> RecuperarTodos();
 
-    int RemoverProduto(string codigo);
+    Result<int> Remover(string codigoBarras);
 
-    int RemoverProduto(Guid id);
+    Result<int> Remover(Guid id);
 }
