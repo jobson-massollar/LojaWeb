@@ -18,4 +18,6 @@ public interface IClienteServices
     Result<int> Remover(Guid id);
 
     Result<int> Remover(long cpf);
+
+    Result<bool> DefinirPreferencias(Guid clienteId, List<Guid> preferencias);
 }

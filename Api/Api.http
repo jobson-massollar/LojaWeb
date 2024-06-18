@@ -53,6 +53,18 @@ Content-type: application/json
 
 ###
 
+POST {{Api_HostAddress}}/api/cliente/b15dc85-b763-4e7b-baf7-a2f409b56334/preferencias
+Content-type: application/json
+
+{
+    "preferencias": [ 
+        "2f0e6858-3a97-4edf-801e-a5accd011139", 
+        "3d063e9d-d7f1-479f-98e9-3576f48600de"
+    ]
+}
+
+###
+
 POST {{Api_HostAddress}}/api/uf
 Content-type: application/json
 

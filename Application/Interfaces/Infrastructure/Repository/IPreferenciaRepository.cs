@@ -7,6 +7,8 @@ public interface IPreferenciaRepository
 {
     void Adicionar(Preferencia preferencia);
 
+    void Atualizar(Preferencia preferencia);
+
     void Remover(Preferencia preferencia);
 
     Preferencia? RecuperarPorId(Guid id);
@@ -20,6 +22,8 @@ public interface IPreferenciaRepository
     Result<int> RemoverPorId(Guid id, ErroEntidade erro);
 
     Preferencia? RecuperarPorDescricao(string descricao);
+
+    List<Preferencia> RecuperarPorId(List<Guid> preferencias);
 
     Result<int> RemoverPorDescricao(string descricao);
 }

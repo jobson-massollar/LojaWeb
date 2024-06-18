@@ -7,6 +7,8 @@ public interface IUFRepository
 {
     void Adicionar(UF uf);
 
+    void Atualizar(UF uf);
+
     void Remover(UF uf);
 
     UF? RecuperarPorId(Guid id);

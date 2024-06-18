@@ -17,6 +17,13 @@ public abstract class Repositorio<T> where T : Entity<T>
         db.Set<T>().Add(entity);
         db.SaveChanges();
     }
+
+    public void Atualizar(T entity)
+    {
+        db.Set<T>().Update(entity);
+        db.SaveChanges();
+    }
+
     public void Remover(T entity)
     {
         db.Set<T>().Remove(entity);

@@ -56,6 +56,7 @@ public class MensagemErro
 
            { ErroEntidade.PREFERENCIA_DESCRICAO_INVALIDA, "Descrição da preferência não pode ficar em branco" },
            { ErroEntidade.PREFERENCIA_DESCRICAO_JA_EXISTE, "Já existe uma preferência com essa descrição" },
+           { ErroEntidade.PREFERENCIA_NAO_ENCONTRADA, "Preferência não encontrada" },
            { ErroEntidade.PREFERENCIA_NAO_PODE_EXCLUIR, "Não é possível excluir essa preferência" }
         };
 

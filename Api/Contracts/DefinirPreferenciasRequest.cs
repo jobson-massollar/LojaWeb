@@ -1,5 +1,5 @@
 ﻿namespace Api.Contracts;
 
-public record DefinirPreferenciasRequest(List<string> preferencias)
+public record DefinirPreferenciasRequest(List<Guid> preferencias)
 {
 }

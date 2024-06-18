@@ -1,4 +1,5 @@
-﻿using Domain.Model;
+﻿using Castle.Components.DictionaryAdapter.Xml;
+using Domain.Model;
 using Domain.Model.Errors;
 
 namespace Application.Interfaces.Infrastructure.Repository;
@@ -6,6 +7,8 @@ namespace Application.Interfaces.Infrastructure.Repository;
 public interface IClienteRepository
 {
     void Adicionar(Cliente cliente);
+
+    void Atualizar(Cliente cliente);
 
     void Remover(Cliente cliente);
 
@@ -21,9 +24,13 @@ public interface IClienteRepository
 
     Cliente? RecuperarPorCPF(long cpf);
 
-    Result<List<Preferencia>?> RecuperarPreferencias(Guid clienteId);
+    Result<List<Preferencia>?> RecuperarPreferencias(Guid id);
 
-    Result<List<Pedido>?> RecuperarPedidos(Guid clienteId);
+    Result<List<Pedido>?> RecuperarPedidos(Guid id);
+
+    Cliente? RecuperarPorIdComPreferencias(Guid id);
+
+    void AtualizarPreferencias(Cliente cliente, List<Preferencia> preferencias);
 
     bool JaExisteCPF(long cpf);
 

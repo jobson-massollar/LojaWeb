@@ -7,6 +7,8 @@ public interface IProdutoRepository
 {
     void Adicionar(Produto produto);
 
+    void Atualizar(Produto produto);
+
     void Remover(Produto produto);
 
     Produto? RecuperarPorId(Guid id);

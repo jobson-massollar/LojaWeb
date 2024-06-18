@@ -33,11 +33,23 @@ public class ClienteRepository : Repositorio<Cliente>, IClienteRepository
             .ThenInclude(e => e.UF)
             .FirstOrDefault(c => c.Id == id);
 
-    public Result<List<Preferencia>?> RecuperarPreferencias(Guid clienteId)
+    public Cliente? RecuperarPorIdComPreferencias(Guid id) =>
+        db.Clientes
+            .Include(c => c.Preferencias)
+            .FirstOrDefault(c => c.Id == id);
+
+    public Result<List<Preferencia>?> RecuperarPreferencias(Guid id)
     {
-        var result = RecuperarPorId(clienteId, ErroEntidade.CLIENTE_NAO_ENCONTRADO);
+        var result = RecuperarPorId(id, ErroEntidade.CLIENTE_NAO_ENCONTRADO);
 
         return result.IsSuccess ? result.Value!.Preferencias : result.Errors!;
+    }
+
+    public void AtualizarPreferencias(Cliente cliente, List<Preferencia> preferencias)
+    {
+        db.Clientes.Update(cliente);
+        db.SaveChanges();
+
     }
 
     public override List<Cliente> RecuperarTodos() =>

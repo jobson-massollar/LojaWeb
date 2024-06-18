@@ -2,6 +2,7 @@
 using Api.ErrorHandling;
 using Application.Interfaces.Entry;
 using AutoMapper;
+using Domain.Model.Errors;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 
@@ -90,6 +91,10 @@ public class ClienteController : ControllerBase
     }
 
     [HttpGet("{clienteId:guid}/preferencias")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType<List<PreferenciaResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
     public IActionResult RecuperarPreferencias(Guid clienteId)
     {
         var result = clienteServices.RecuperarPreferencias(clienteId);
@@ -106,12 +111,24 @@ public class ClienteController : ControllerBase
     }
 
     [HttpPost("{clienteId:guid}/preferencias")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
     public IActionResult DefinirPreferencias(Guid clienteId, DefinirPreferenciasRequest request)
     {
+        var result = clienteServices.DefinirPreferencias(clienteId, request.preferencias);
 
+        return result.IsSuccess ?
+            Ok()
+            : 
+            BadRequest(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpGet("{clienteId:guid}/pedidos")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType<List<PedidoResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
     public IActionResult RecuperarPedidos(Guid clienteId)
     {
         var result = clienteServices.RecuperarPedidos(clienteId);
