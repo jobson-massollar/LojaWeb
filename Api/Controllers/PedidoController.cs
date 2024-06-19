@@ -25,7 +25,7 @@ public class PedidoController : Controller
     [HttpPost]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status422UnprocessableEntity)]
     public IActionResult CriarPedido(CriarPedidoRequest request)
     {
         var data = mapper.Map<CriarPedidoData>(request);
@@ -35,7 +35,7 @@ public class PedidoController : Controller
         return result.IsSuccess ?
             CreatedAtAction(nameof(CriarPedido), mapper.Map<PedidoResponse>(result.Value!))
             :
-            BadRequest(msgErro.GerarErros(result.Errors!));
+            UnprocessableEntity(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpGet]
@@ -52,7 +52,7 @@ public class PedidoController : Controller
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status409Conflict)]
     public IActionResult RemoverPedido(Guid id)
     {
         var result = pedidoServices.Remover(id);
@@ -60,6 +60,6 @@ public class PedidoController : Controller
         if (result.IsSuccess)
             return result.Value! == 1 ? NoContent() : NotFound();
         else
-            return BadRequest(msgErro.GerarErros(result.Errors!));
+            return Conflict(msgErro.GerarErros(result.Errors!));
     }
 }

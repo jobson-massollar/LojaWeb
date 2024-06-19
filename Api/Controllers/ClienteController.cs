@@ -25,7 +25,7 @@ public class ClienteController : ControllerBase
     [HttpPost]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status422UnprocessableEntity)]
     public IActionResult CriarCliente(CriarClienteRequest request)
     {
         var data = mapper.Map<CriarClienteData>(request);
@@ -35,7 +35,7 @@ public class ClienteController : ControllerBase
         return result.IsSuccess ?
             CreatedAtAction(nameof(CriarCliente), mapper.Map<ClienteResponse>(result.Value!))
             :
-            BadRequest(msgErro.GerarErros(result.Errors!));
+            UnprocessableEntity(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpGet("{cpf:long}")]
@@ -63,7 +63,7 @@ public class ClienteController : ControllerBase
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status409Conflict)]
     public IActionResult RemoverCliente(Guid id)
     {
         var result = clienteServices.Remover(id);
@@ -71,14 +71,14 @@ public class ClienteController : ControllerBase
         if (result.IsSuccess)
             return result.Value! == 1 ? NoContent() : NotFound();
         else
-            return BadRequest(msgErro.GerarErros(result.Errors!));
+            return Conflict(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpDelete("{cpf:long}")]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status409Conflict)]
     public IActionResult RemoverCliente(long cpf)
     {
         var result = clienteServices.Remover(cpf);
@@ -86,33 +86,27 @@ public class ClienteController : ControllerBase
         if (result.IsSuccess)
             return result.Value! == 1 ? NoContent() : NotFound();
         else
-            return BadRequest(msgErro.GerarErros(result.Errors!));
+            return Conflict(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpGet("{clienteId:guid}/preferencias")]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType<List<PreferenciaResponse>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
     public IActionResult RecuperarPreferencias(Guid clienteId)
     {
         var result = clienteServices.RecuperarPreferencias(clienteId);
 
-        if (result.IsSuccess)
-        {
-            return result.Value is not null ?
-                Ok(result.Value.Select(p => mapper.Map<PreferenciaResponse>(p)))
-                :
-                NotFound();
-        }
-        else
-            return BadRequest(msgErro.GerarErros(result.Errors!));
+        return result.IsSuccess ?
+            Ok(result.Value!.Select(p => mapper.Map<PreferenciaResponse>(p)))
+            :
+            NotFound(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpPost("{clienteId:guid}/preferencias")]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status422UnprocessableEntity)]
     public IActionResult DefinirPreferencias(Guid clienteId, DefinirPreferenciasRequest request)
     {
         var result = clienteServices.DefinirPreferencias(clienteId, request.preferencias);
@@ -120,26 +114,20 @@ public class ClienteController : ControllerBase
         return result.IsSuccess ?
             Ok()
             :
-            BadRequest(msgErro.GerarErros(result.Errors!));
+            UnprocessableEntity(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpGet("{clienteId:guid}/pedidos")]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType<List<PedidoResponse>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
     public IActionResult RecuperarPedidos(Guid clienteId)
     {
         var result = clienteServices.RecuperarPedidos(clienteId);
 
-        if (result.IsSuccess)
-        {
-            return result.Value is not null ?
-                Ok(result.Value.Select(p => mapper.Map<PedidoResponse>(p)))
-                :
-                NotFound();
-        }
-        else
-            return BadRequest(msgErro.GerarErros(result.Errors!));
+        return result.IsSuccess ?
+            Ok(result.Value!.Select(p => mapper.Map<PedidoResponse>(p)))
+            :
+            NotFound(msgErro.GerarErros(result.Errors!));
     }
 }

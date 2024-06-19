@@ -19,11 +19,11 @@ POST {{Api_HostAddress}}/api/cliente
 Content-type: application/json
 
 {
-    "cpf": "22237067030",
+    "cpf": "93916990730",
     "nome": "Jose da Silva",
-    "email": "jose.silva@gmail.com",
+    "email": "jane@gmail.com",
     "password": "123456",
-    "logradouro": "",
+    "logradouro": "Rua",
     "numero": "100",
     "complemento": "ap 101",
     "bairro": "Tijuca",
@@ -65,12 +65,12 @@ Content-type: application/json
 
 ###
 
-GET {{Api_HostAddress}}/api/cliente/db15dc85-b763-4e7b-baf7-a2f409b56334/preferencias
+GET {{Api_HostAddress}}/api/cliente/32ac4a68-55f3-4985-b536-5bb24af8deee/preferencias
 Accept: application/json
 
 ###
 
-GET {{Api_HostAddress}}/api/cliente/db15dc85-b763-4e7b-baf7-a2f409b56334/pedidos
+GET {{Api_HostAddress}}/api/cliente/0212b6b4-974d-4f33-a8b0-2c8d5f5397ec/pedidos
 Accept: application/json
 
 ###
@@ -162,3 +162,4 @@ Content-type: application/json
         { "codigoBarras": "3456789012345", "quantidade": "5"}
     ]
 }
+

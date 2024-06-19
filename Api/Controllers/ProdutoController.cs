@@ -25,7 +25,7 @@ public class ProdutoController : Controller
     [HttpPost]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status422UnprocessableEntity)]
     public IActionResult CriarProduto(CriarProdutoRequest request)
     {
         var data = mapper.Map<CriarProdutoData>(request);
@@ -35,7 +35,7 @@ public class ProdutoController : Controller
         return result.IsSuccess ?
             CreatedAtAction(nameof(CriarProduto), result.Value!)
             :
-            BadRequest(msgErro.GerarErros(result.Errors!));
+            UnprocessableEntity(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpGet("{codigo}")]
@@ -52,7 +52,6 @@ public class ProdutoController : Controller
     [HttpGet]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType<List<ProdutoResponse>>(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult RecuperarTodosProdutos()
     {
         var produtos = produtoServices.RecuperarTodos();
@@ -64,7 +63,7 @@ public class ProdutoController : Controller
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status409Conflict)]
     public IActionResult RemoverProduto(Guid id)
     {
         var result = produtoServices.Remover(id);
@@ -72,14 +71,14 @@ public class ProdutoController : Controller
         if (result.IsSuccess)
             return result.Value! == 1 ? NoContent() : NotFound();
         else
-            return BadRequest(msgErro.GerarErros(result.Errors!));
+            return Conflict(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpDelete("{codigo}")]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status409Conflict)]
     public IActionResult RemoverProduto(string codigo)
     {
         var result = produtoServices.Remover(codigo);
@@ -87,6 +86,6 @@ public class ProdutoController : Controller
         if (result.IsSuccess)
             return result.Value! == 1 ? NoContent() : NotFound();
         else
-            return BadRequest(msgErro.GerarErros(result.Errors!));
+            return Conflict(msgErro.GerarErros(result.Errors!));
     }
 }

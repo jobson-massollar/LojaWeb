@@ -25,7 +25,7 @@ public class UFController : Controller
     [HttpPost]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status422UnprocessableEntity)]
     public IActionResult CriarUF(CriarUFRequest request)
     {
         var result = ufServices.CriarUF(request.Sigla, request.Nome);
@@ -33,7 +33,7 @@ public class UFController : Controller
         return result.IsSuccess ?
             CreatedAtAction(nameof(CriarUF), mapper.Map<UFResponse>(result.Value!))
             :
-            BadRequest(msgErro.GerarErros(result.Errors!));
+            UnprocessableEntity(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpGet("{sigla}")]
@@ -59,7 +59,7 @@ public class UFController : Controller
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status409Conflict)]
     public IActionResult RemoverUF(Guid id)
     {
         var result = ufServices.Remover(id);
@@ -67,14 +67,14 @@ public class UFController : Controller
         if (result.IsSuccess)
             return result.Value! == 1 ? NoContent() : NotFound();
         else
-            return BadRequest(msgErro.GerarErros(result.Errors!));
+            return Conflict(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpDelete("{sigla}")]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status409Conflict)]
     public IActionResult RemoverUF(string sigla)
     {
         var result = ufServices.Remover(sigla);
@@ -82,6 +82,6 @@ public class UFController : Controller
         if (result.IsSuccess)
             return result.Value! == 1 ? NoContent() : NotFound();
         else
-            return BadRequest(msgErro.GerarErros(result.Errors!));
+            return Conflict(msgErro.GerarErros(result.Errors!));
     }
 }

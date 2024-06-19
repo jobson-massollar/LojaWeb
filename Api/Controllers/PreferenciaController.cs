@@ -25,7 +25,7 @@ public class PreferenciaController : Controller
     [HttpPost]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status422UnprocessableEntity)]
     public IActionResult CriarPreferencia(CriarPreferenciaRequest request)
     {
         var result = prefServices.CriarPreferencia(request.Descricao);
@@ -33,12 +33,13 @@ public class PreferenciaController : Controller
         return result.IsSuccess ?
             Ok(mapper.Map<PreferenciaResponse>(result.Value!))
             :
-            BadRequest(msgErro.GerarErros(result.Errors!));
+            UnprocessableEntity(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpGet("{descricao}")]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType<PreferenciaResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult RecuperarPreferenciaPorDescricao(string descricao)
     {
         var preferencia = prefServices.RecuperarPorDescricao(descricao);
@@ -60,7 +61,7 @@ public class PreferenciaController : Controller
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status409Conflict)]
     public IActionResult RemoverPreferencia(Guid id)
     {
         var result = prefServices.Remover(id);
@@ -68,14 +69,14 @@ public class PreferenciaController : Controller
         if (result.IsSuccess)
             return result.Value! == 1 ? NoContent() : NotFound();
         else
-            return BadRequest(msgErro.GerarErros(result.Errors!));
+            return Conflict(msgErro.GerarErros(result.Errors!));
     }
 
     [HttpDelete("{descricao}")]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<List<Erro>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<List<Erro>>(StatusCodes.Status409Conflict)]
     public IActionResult RemoverPreferencia(string descricao)
     {
         var result = prefServices.Remover(descricao);
@@ -83,6 +84,6 @@ public class PreferenciaController : Controller
         if (result.IsSuccess)
             return result.Value! == 1 ? NoContent() : NotFound();
         else
-            return BadRequest(msgErro.GerarErros(result.Errors!));
+            return Conflict(msgErro.GerarErros(result.Errors!));
     }
 }
