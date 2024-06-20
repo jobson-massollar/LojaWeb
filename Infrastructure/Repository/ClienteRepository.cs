@@ -10,9 +10,9 @@ public class ClienteRepository : Repositorio<Cliente>, IClienteRepository
 {
     public ClienteRepository(LojaDbContext db) : base(db) { }
 
-    public bool JaExisteCPF(long cpf) => db.Clientes.FirstOrDefault(c => c.CPF.Valor == cpf) is Cliente;
+    public bool JaExisteCPF(long cpf) => db.Clientes.SingleOrDefault(c => c.CPF.Valor == cpf) is Cliente;
 
-    public bool JaExisteEmail(string email) => db.Clientes.FirstOrDefault(c => c.Email == email) is Cliente;
+    public bool JaExisteEmail(string email) => db.Clientes.SingleOrDefault(c => c.Email == email) is Cliente;
 
     public Result<List<Pedido>?> RecuperarPedidos(Guid id)
     {
@@ -25,25 +25,25 @@ public class ClienteRepository : Repositorio<Cliente>, IClienteRepository
         db.Clientes
             .Include(c => c.Endereco)
             .ThenInclude(e => e.UF)
-            .FirstOrDefault(c => c.CPF.Valor == cpf);
+            .SingleOrDefault(c => c.CPF.Valor == cpf);
 
     public override Cliente? RecuperarPorId(Guid id) =>
         db.Clientes
             .Include(c => c.Endereco)
             .ThenInclude(e => e.UF)
-            .FirstOrDefault(c => c.Id == id);
+            .SingleOrDefault(c => c.Id == id);
 
     public Cliente? RecuperarPorIdComPreferencias(Guid id) =>
         db.Clientes
             .Include(c => c.Preferencias)
-            .FirstOrDefault(c => c.Id == id);
+            .SingleOrDefault(c => c.Id == id);
 
     public Cliente? RecuperarPorIdComPedidos(Guid id) =>
         db.Clientes
             .Include(c => c.Pedidos)
             .ThenInclude(p => p.Itens)
             .ThenInclude(it => it.Produto)
-            .FirstOrDefault(c => c.Id == id);
+            .SingleOrDefault(c => c.Id == id);
 
     public Result<List<Preferencia>?> RecuperarPreferencias(Guid id)
     {

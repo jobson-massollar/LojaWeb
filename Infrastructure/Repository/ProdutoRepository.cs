@@ -9,7 +9,7 @@ public class ProdutoRepository : Repositorio<Produto>, IProdutoRepository
 {
     public ProdutoRepository(LojaDbContext db) : base(db) { }
 
-    public Produto? RecuperarPorCodigo(string codigo) => db.Produtos.FirstOrDefault(p => p.CodigoBarras.Valor == codigo);
+    public Produto? RecuperarPorCodigo(string codigo) => db.Produtos.SingleOrDefault(p => p.CodigoBarras.Valor == codigo);
 
     public override Result<int> RemoverPorId(Guid id) => RemoverPorId(id, ErroEntidade.PRODUTO_NAO_PODE_EXCLUIR);
 

@@ -9,7 +9,7 @@ public class PreferenciaRepository : Repositorio<Preferencia>, IPreferenciaRepos
 {
     public PreferenciaRepository(LojaDbContext db) : base(db) { }
 
-    public Preferencia? RecuperarPorDescricao(string descricao) => db.Preferencias.FirstOrDefault(p => p.Descricao == descricao);
+    public Preferencia? RecuperarPorDescricao(string descricao) => db.Preferencias.SingleOrDefault(p => p.Descricao == descricao);
 
     public List<Preferencia> RecuperarPorId(List<Guid> preferencias)
     {
