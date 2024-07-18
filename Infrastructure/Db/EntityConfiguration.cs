@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Infrastructure.Db;
 
 public class EntityConfiguration<T> : IEntityTypeConfiguration<T>
-    where T : Entity<T>
+    where T : Entity
 {
     private readonly string sufixoNomeTrigger = "AfterUpdate";
 

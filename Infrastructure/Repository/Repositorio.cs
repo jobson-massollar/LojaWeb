@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace Infrastructure.Repository;
 
-public abstract class Repositorio<T> where T : Entity<T>
+public abstract class Repositorio<T> where T : Entity
 {
     protected readonly LojaDbContext db;
 

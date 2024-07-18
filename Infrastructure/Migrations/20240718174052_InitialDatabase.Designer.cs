@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(LojaDbContext))]
-    [Migration("20240618011123_InitDatabase")]
-    partial class InitDatabase
+    [Migration("20240718174052_InitialDatabase")]
+    partial class InitialDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,12 +78,12 @@ namespace Infrastructure.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Clientes", t =>
-                        {
-                            t.HasTrigger("Clientes_AfterUpdate");
-                        });
+                    b.ToTable("Clientes");
 
-                    b.HasAnnotation("UPDATE-TRIGGER-Clientes", "\r\nDROP TRIGGER IF EXISTS Clientes_AfterUpdate;\r\nCREATE TRIGGER IF NOT EXISTS Clientes_AfterUpdate \r\n         AFTER UPDATE\r\n            ON Clientes\r\n          WHEN old.UpdatedAt <> CURRENT_TIMESTAMP\r\nBEGIN\r\n    UPDATE Clientes\r\n       SET UpdatedAt = CURRENT_TIMESTAMP\r\n     WHERE id = OLD.id;\r\nEND;\r\n");
+                    b
+                        .UseTptMappingStrategy()
+                        .HasAnnotation("CREATE-UPDATE-TRIGGER-Clientes", "\r\nCREATE TRIGGER IF NOT EXISTS Clientes_AfterUpdate \r\n    AFTER UPDATE\r\n    ON Clientes\r\n    WHEN old.UpdatedAt <> CURRENT_TIMESTAMP\r\nBEGIN\r\n    UPDATE Clientes\r\n    SET UpdatedAt = CURRENT_TIMESTAMP\r\n    WHERE id = OLD.id;\r\nEND;\r\n")
+                        .HasAnnotation("DROP-UPDATE-TRIGGER-Clientes", "DROP TRIGGER IF EXISTS Clientes_AfterUpdate;");
                 });
 
             modelBuilder.Entity("Domain.Model.Endereco", b =>
@@ -149,12 +149,11 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UFId");
 
-                    b.ToTable("Enderecos", t =>
-                        {
-                            t.HasTrigger("Enderecos_AfterUpdate");
-                        });
+                    b.ToTable("Enderecos");
 
-                    b.HasAnnotation("UPDATE-TRIGGER-Enderecos", "\r\nDROP TRIGGER IF EXISTS Enderecos_AfterUpdate;\r\nCREATE TRIGGER IF NOT EXISTS Enderecos_AfterUpdate \r\n         AFTER UPDATE\r\n            ON Enderecos\r\n          WHEN old.UpdatedAt <> CURRENT_TIMESTAMP\r\nBEGIN\r\n    UPDATE Enderecos\r\n       SET UpdatedAt = CURRENT_TIMESTAMP\r\n     WHERE id = OLD.id;\r\nEND;\r\n");
+                    b
+                        .HasAnnotation("CREATE-UPDATE-TRIGGER-Enderecos", "\r\nCREATE TRIGGER IF NOT EXISTS Enderecos_AfterUpdate \r\n    AFTER UPDATE\r\n    ON Enderecos\r\n    WHEN old.UpdatedAt <> CURRENT_TIMESTAMP\r\nBEGIN\r\n    UPDATE Enderecos\r\n    SET UpdatedAt = CURRENT_TIMESTAMP\r\n    WHERE id = OLD.id;\r\nEND;\r\n")
+                        .HasAnnotation("DROP-UPDATE-TRIGGER-Enderecos", "DROP TRIGGER IF EXISTS Enderecos_AfterUpdate;");
                 });
 
             modelBuilder.Entity("Domain.Model.Item", b =>
@@ -200,12 +199,11 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ProdutoId");
 
-                    b.ToTable("Itens", null, t =>
-                        {
-                            t.HasTrigger("Itens_AfterUpdate");
-                        });
+                    b.ToTable("Itens", (string)null);
 
-                    b.HasAnnotation("UPDATE-TRIGGER-Itens", "\r\nDROP TRIGGER IF EXISTS Itens_AfterUpdate;\r\nCREATE TRIGGER IF NOT EXISTS Itens_AfterUpdate \r\n         AFTER UPDATE\r\n            ON Itens\r\n          WHEN old.UpdatedAt <> CURRENT_TIMESTAMP\r\nBEGIN\r\n    UPDATE Itens\r\n       SET UpdatedAt = CURRENT_TIMESTAMP\r\n     WHERE id = OLD.id;\r\nEND;\r\n");
+                    b
+                        .HasAnnotation("CREATE-UPDATE-TRIGGER-Itens", "\r\nCREATE TRIGGER IF NOT EXISTS Itens_AfterUpdate \r\n    AFTER UPDATE\r\n    ON Itens\r\n    WHEN old.UpdatedAt <> CURRENT_TIMESTAMP\r\nBEGIN\r\n    UPDATE Itens\r\n    SET UpdatedAt = CURRENT_TIMESTAMP\r\n    WHERE id = OLD.id;\r\nEND;\r\n")
+                        .HasAnnotation("DROP-UPDATE-TRIGGER-Itens", "DROP TRIGGER IF EXISTS Itens_AfterUpdate;");
                 });
 
             modelBuilder.Entity("Domain.Model.Pedido", b =>
@@ -231,12 +229,11 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ClienteId");
 
-                    b.ToTable("Pedidos", t =>
-                        {
-                            t.HasTrigger("Pedidos_AfterUpdate");
-                        });
+                    b.ToTable("Pedidos");
 
-                    b.HasAnnotation("UPDATE-TRIGGER-Pedidos", "\r\nDROP TRIGGER IF EXISTS Pedidos_AfterUpdate;\r\nCREATE TRIGGER IF NOT EXISTS Pedidos_AfterUpdate \r\n         AFTER UPDATE\r\n            ON Pedidos\r\n          WHEN old.UpdatedAt <> CURRENT_TIMESTAMP\r\nBEGIN\r\n    UPDATE Pedidos\r\n       SET UpdatedAt = CURRENT_TIMESTAMP\r\n     WHERE id = OLD.id;\r\nEND;\r\n");
+                    b
+                        .HasAnnotation("CREATE-UPDATE-TRIGGER-Pedidos", "\r\nCREATE TRIGGER IF NOT EXISTS Pedidos_AfterUpdate \r\n    AFTER UPDATE\r\n    ON Pedidos\r\n    WHEN old.UpdatedAt <> CURRENT_TIMESTAMP\r\nBEGIN\r\n    UPDATE Pedidos\r\n    SET UpdatedAt = CURRENT_TIMESTAMP\r\n    WHERE id = OLD.id;\r\nEND;\r\n")
+                        .HasAnnotation("DROP-UPDATE-TRIGGER-Pedidos", "DROP TRIGGER IF EXISTS Pedidos_AfterUpdate;");
                 });
 
             modelBuilder.Entity("Domain.Model.Preferencia", b =>
@@ -264,12 +261,11 @@ namespace Infrastructure.Migrations
                     b.HasIndex("Descricao")
                         .IsUnique();
 
-                    b.ToTable("Preferencias", t =>
-                        {
-                            t.HasTrigger("Preferencias_AfterUpdate");
-                        });
+                    b.ToTable("Preferencias");
 
-                    b.HasAnnotation("UPDATE-TRIGGER-Preferencias", "\r\nDROP TRIGGER IF EXISTS Preferencias_AfterUpdate;\r\nCREATE TRIGGER IF NOT EXISTS Preferencias_AfterUpdate \r\n         AFTER UPDATE\r\n            ON Preferencias\r\n          WHEN old.UpdatedAt <> CURRENT_TIMESTAMP\r\nBEGIN\r\n    UPDATE Preferencias\r\n       SET UpdatedAt = CURRENT_TIMESTAMP\r\n     WHERE id = OLD.id;\r\nEND;\r\n");
+                    b
+                        .HasAnnotation("CREATE-UPDATE-TRIGGER-Preferencias", "\r\nCREATE TRIGGER IF NOT EXISTS Preferencias_AfterUpdate \r\n    AFTER UPDATE\r\n    ON Preferencias\r\n    WHEN old.UpdatedAt <> CURRENT_TIMESTAMP\r\nBEGIN\r\n    UPDATE Preferencias\r\n    SET UpdatedAt = CURRENT_TIMESTAMP\r\n    WHERE id = OLD.id;\r\nEND;\r\n")
+                        .HasAnnotation("DROP-UPDATE-TRIGGER-Preferencias", "DROP TRIGGER IF EXISTS Preferencias_AfterUpdate;");
                 });
 
             modelBuilder.Entity("Domain.Model.Produto", b =>
@@ -293,15 +289,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("TEXT")
                         .HasDefaultValueSql("datetime()");
 
-                    b.ComplexProperty<Dictionary<string, object>>("CodigoBarras", "Domain.Model.Produto.CodigoBarras#CodigoBarras", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("Valor")
-                                .IsRequired()
-                                .HasColumnType("TEXT");
-                        });
-
                     b.ComplexProperty<Dictionary<string, object>>("Preco", "Domain.Model.Produto.Preco#Dinheiro", b1 =>
                         {
                             b1.IsRequired();
@@ -316,12 +303,11 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Produtos", t =>
-                        {
-                            t.HasTrigger("Produtos_AfterUpdate");
-                        });
+                    b.ToTable("Produtos");
 
-                    b.HasAnnotation("UPDATE-TRIGGER-Produtos", "\r\nDROP TRIGGER IF EXISTS Produtos_AfterUpdate;\r\nCREATE TRIGGER IF NOT EXISTS Produtos_AfterUpdate \r\n         AFTER UPDATE\r\n            ON Produtos\r\n          WHEN old.UpdatedAt <> CURRENT_TIMESTAMP\r\nBEGIN\r\n    UPDATE Produtos\r\n       SET UpdatedAt = CURRENT_TIMESTAMP\r\n     WHERE id = OLD.id;\r\nEND;\r\n");
+                    b
+                        .HasAnnotation("CREATE-UPDATE-TRIGGER-Produtos", "\r\nCREATE TRIGGER IF NOT EXISTS Produtos_AfterUpdate \r\n    AFTER UPDATE\r\n    ON Produtos\r\n    WHEN old.UpdatedAt <> CURRENT_TIMESTAMP\r\nBEGIN\r\n    UPDATE Produtos\r\n    SET UpdatedAt = CURRENT_TIMESTAMP\r\n    WHERE id = OLD.id;\r\nEND;\r\n")
+                        .HasAnnotation("DROP-UPDATE-TRIGGER-Produtos", "DROP TRIGGER IF EXISTS Produtos_AfterUpdate;");
                 });
 
             modelBuilder.Entity("Domain.Model.UF", b =>
@@ -353,12 +339,26 @@ namespace Infrastructure.Migrations
                     b.HasIndex("Sigla")
                         .IsUnique();
 
-                    b.ToTable("UFs", t =>
-                        {
-                            t.HasTrigger("UFs_AfterUpdate");
-                        });
+                    b.ToTable("UFs");
 
-                    b.HasAnnotation("UPDATE-TRIGGER-UFs", "\r\nDROP TRIGGER IF EXISTS UFs_AfterUpdate;\r\nCREATE TRIGGER IF NOT EXISTS UFs_AfterUpdate \r\n         AFTER UPDATE\r\n            ON UFs\r\n          WHEN old.UpdatedAt <> CURRENT_TIMESTAMP\r\nBEGIN\r\n    UPDATE UFs\r\n       SET UpdatedAt = CURRENT_TIMESTAMP\r\n     WHERE id = OLD.id;\r\nEND;\r\n");
+                    b
+                        .HasAnnotation("CREATE-UPDATE-TRIGGER-UFs", "\r\nCREATE TRIGGER IF NOT EXISTS UFs_AfterUpdate \r\n    AFTER UPDATE\r\n    ON UFs\r\n    WHEN old.UpdatedAt <> CURRENT_TIMESTAMP\r\nBEGIN\r\n    UPDATE UFs\r\n    SET UpdatedAt = CURRENT_TIMESTAMP\r\n    WHERE id = OLD.id;\r\nEND;\r\n")
+                        .HasAnnotation("DROP-UPDATE-TRIGGER-UFs", "DROP TRIGGER IF EXISTS UFs_AfterUpdate;");
+                });
+
+            modelBuilder.Entity("Domain.Model.ClienteRG", b =>
+                {
+                    b.HasBaseType("Domain.Model.Cliente");
+
+                    b.Property<string>("RG")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.ToTable("ClienteRGs", (string)null);
+
+                    b
+                        .HasAnnotation("CREATE-UPDATE-TRIGGER-ClienteRGs", "\r\nCREATE TRIGGER IF NOT EXISTS ClienteRGs_AfterUpdate \r\n    AFTER UPDATE\r\n    ON ClienteRGs\r\n    WHEN old.UpdatedAt <> CURRENT_TIMESTAMP\r\nBEGIN\r\n    UPDATE ClienteRGs\r\n    SET UpdatedAt = CURRENT_TIMESTAMP\r\n    WHERE id = OLD.id;\r\nEND;\r\n")
+                        .HasAnnotation("DROP-UPDATE-TRIGGER-ClienteRGs", "DROP TRIGGER IF EXISTS ClienteRGs_AfterUpdate;");
                 });
 
             modelBuilder.Entity("ClientePreferencia", b =>
@@ -454,6 +454,41 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Cliente");
+                });
+
+            modelBuilder.Entity("Domain.Model.Produto", b =>
+                {
+                    b.OwnsOne("Domain.Model.CodigoBarras", "CodigoBarras", b1 =>
+                        {
+                            b1.Property<Guid>("ProdutoId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Valor")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("ProdutoId");
+
+                            b1.HasIndex("Valor")
+                                .IsUnique();
+
+                            b1.ToTable("Produtos");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProdutoId");
+                        });
+
+                    b.Navigation("CodigoBarras")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Model.ClienteRG", b =>
+                {
+                    b.HasOne("Domain.Model.Cliente", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Model.ClienteRG", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Model.Cliente", b =>

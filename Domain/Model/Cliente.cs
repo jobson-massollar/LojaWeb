@@ -9,17 +9,17 @@ public class Cliente : Entity<Cliente>
 {
     public CPF CPF { get; init; } = null!;
 
-    public string Nome { get; private set; } = null!;
+    public string Nome { get; protected set; } = null!;
 
-    public string Email { get; private set; } = null!;
+    public string Email { get; protected set; } = null!;
 
     public required Telefone Telefone { get; set; } = null!;
 
-    public virtual Endereco Endereco { get; set; } = null!; // Lazy loading
+    public Endereco Endereco { get; set; } = null!; 
 
-    public virtual List<Preferencia> Preferencias { get; private set; } = null!; // Lazy loading
+    public List<Preferencia> Preferencias { get; protected set; } = null!;
 
-    public virtual List<Pedido> Pedidos { get; private set; } = null!; // Lazy loading
+    public List<Pedido> Pedidos { get; protected set; } = null!; 
 
     /// <summary>
     /// Esse construtor deveria ser privado, mas é protegido por conta do EF
@@ -60,7 +60,7 @@ public class Cliente : Entity<Cliente>
     /// <param name="endereco">Endereço: não pode ser nulo</param>
     /// <param name="telefone">: Telefone: não pode ser nulo</param>
     /// <returns>Lista de erros de validação</returns>
-    private static List<ErroEntidade> valida(CPF cpf, string nome, string email, Endereco endereco, Telefone telefone)
+    protected static List<ErroEntidade> valida(CPF cpf, string nome, string email, Endereco endereco, Telefone telefone)
     {
         List<ErroEntidade> erros = [];
 

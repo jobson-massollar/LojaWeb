@@ -19,6 +19,8 @@ public class LojaDbContext : DbContext
 
     public DbSet<Preferencia> Preferencias { get; set; }
 
+    public DbSet<ClienteRG> ClienteRGs { get; set; }
+
     public LojaDbContext(DbContextOptions<LojaDbContext> options)
         : base(options)
     {
@@ -31,6 +33,7 @@ public class LojaDbContext : DbContext
 
         new ProdutoConfiguration().Configure(modelBuilder.Entity<Produto>());
         new ClienteConfiguration().Configure(modelBuilder.Entity<Cliente>());
+        new ClienteRGConfiguration().Configure(modelBuilder.Entity<ClienteRG>());
         new ItemConfiguration().Configure(modelBuilder.Entity<Item>());
         new PedidoConfiguration().Configure(modelBuilder.Entity<Pedido>());
         new EnderecoConfiguration().Configure(modelBuilder.Entity<Endereco>());

@@ -11,9 +11,9 @@ public class Item : Entity<Item>
 
     public Dinheiro Preco { get; init; } = null!;
 
-    public virtual Pedido Pedido { get; init; } = null!; // Lazy loading
+    public Pedido Pedido { get; init; } = null!; 
 
-    public virtual Produto Produto { get; init; } = null!; // Lazy loading
+    public Produto Produto { get; init; } = null!; 
 
     public float Valor => Quantidade * Preco.Valor;
 

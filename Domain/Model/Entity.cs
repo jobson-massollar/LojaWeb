@@ -1,11 +1,10 @@
 ﻿namespace Domain.Model;
 
 /// <summary>
-/// Supper classe das Entidades.
-/// Define as propriedades comuns e força a implementação do Equals.
+/// Super classe das Entidades do BD.
+/// Define as propriedades comuns no BD.
 /// </summary>
-/// <typeparam name="T">Entidade do sistema</typeparam>
-public abstract class Entity<T> : IEquatable<T> where T : Entity<T>
+public abstract class Entity
 {
     /// <summary>
     /// Id do objeto (usado como Pk no mecanismo de persistência)
@@ -27,6 +26,15 @@ public abstract class Entity<T> : IEquatable<T> where T : Entity<T>
     /// </summary>
     public DateTime UpdatedAt { get; protected set; }
 
+}
+
+/// <summary>
+/// Super classe das Entidades do Domínio.
+/// Define as propriedades comuns no BD e força a implementação do Equals.
+/// </summary>
+/// <typeparam name="T">Entidade do sistema</typeparam>
+public abstract class Entity<T> : Entity, IEquatable<T>
+{
     /// <summary>
     /// Método Equals abstrato para forçar a implementação desse método nas Entidades
     /// </summary>

@@ -7,11 +7,11 @@ namespace Domain.Model;
 /// </summary>
 public class Pedido : Entity<Pedido>
 {
-    public virtual Cliente Cliente { get; init; } = null!; // Lazy loading
+    public Cliente Cliente { get; init; } = null!; 
 
-    public virtual Endereco EnderecoEntrega { get; init; } = null!; // Lazy loading
+    public Endereco EnderecoEntrega { get; init; } = null!; 
 
-    public virtual List<Item> Itens { get; private set; } = new(); // Lazy loading
+    public List<Item> Itens { get; private set; } = new(); 
 
     public float Total => Itens.Sum(i => i.Valor);
 

@@ -9,7 +9,7 @@ public class Preferencia : Entity<Preferencia>
 {
     public string Descricao { get; init; } = null!;
 
-    public virtual List<Cliente> Clientes { get; private set; } = null!;
+    public List<Cliente> Clientes { get; private set; } = null!;
 
     /// <summary>
     /// Esse construtor deveria ser privado, mas é protegido por conta do EF
